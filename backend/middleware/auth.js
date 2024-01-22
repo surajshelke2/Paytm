@@ -1,26 +1,28 @@
+const jwt = require('jsonwebtoken');
 
+const authMiddleware = async (req, res, next) => {
+  const authHeader = req.headers.authorization;
 
-const authMiddleware =(req,res,next)=>{
+  if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    return res.status(401).json({ msg: 'Missing authentication header' });
+  }
 
+  const token = authHeader.split(' ')[1];
 
-    const authHeader = req.headers.authorization;
+  try {
+    const decoded = await jwt.verify(token, process.env.JWT_SECRET);
 
-    if(!authHeader || !authHeader.startsWith('Bearer')){
-        return res.status(401).json({msg:'Missing authentication header'});
-    }
+    // Now you can access decoded.userId
+    req.userId = decoded.userId;
+    console.log(req.userId);
 
-    const token = authHeader.split(' ')[1];
+    next();
+  } catch (error) {
+    return res.status(403).json({
+      success: false,
+      message: error.message // Use error.message instead of error
+    });
+  }
+};
 
-    try{
-        const decoded=jwt.verify(token,process.env.JWT_SERET);
-
-        req.userId = decoded.userId;
-        next();
-    }
-    catch(error){
-        return res.status(403).json({});
-    }
-
-}
-
-module.exports = {authMiddleware};
+module.exports = { authMiddleware };

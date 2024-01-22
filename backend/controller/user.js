@@ -1,8 +1,7 @@
 const z = require("zod");
 const User = require("../model/user");
-const jwt = require("jsonwebtoken");
+const jwt = require('jsonwebtoken');
 const Account = require("../model/account");
-const { JWT_SECRET } = process.env;
 
 const signupSchema = z.object({
   username: z.string().email(),
@@ -74,9 +73,10 @@ const login = async (req, res) => {
     });
 
     if (user) {
-      const token = jwt.sign({ userId: user._id }, JWT_SECRET);
+      const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET);
 
       res.json({
+        success:true,
         token,
       });
     } else {

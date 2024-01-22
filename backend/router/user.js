@@ -4,11 +4,11 @@ const { authMiddleware } = require('../middleware/auth');
 
 const router = express.Router();
 
-router.post('/signup', authMiddleware,register);
-router.post('/signin', authMiddleware,login);
+router.post('/signup',register);
+router.post('/signin',login);
 
 router.put("/",authMiddleware,updateUser);
-router.get("/bulk", authMiddleware,getUsers)
+router.get("/bulk", authMiddleware,getUsers);
 
 
-module.exports = router
+module.exports =router

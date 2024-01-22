@@ -11,4 +11,4 @@ router.post('/transfer',authMiddleware,transfer)
 
 
 
-module.express={router};
+module.exports=router
